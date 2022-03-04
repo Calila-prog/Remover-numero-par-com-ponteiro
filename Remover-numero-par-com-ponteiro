@@ -1,0 +1,211 @@
+#include <iostream>
+#include <cstdlib>
+using namespace std;
+
+struct lista_de_no
+{
+	int dado;
+	lista_de_no *prox;//aponta para o prox elemento da lista
+	lista_de_no *anterior;//aponta para o elemento anterior da lista
+};//criar a struct
+
+lista_de_no *inicio = NULL; //criando a lista
+lista_de_no *ultimo = NULL; //criando a lista
+
+void inserir(lista_de_no *novo);
+void buscar( int valor);
+void remover(int valor);
+void imprimir();
+
+int main()
+{
+	int valor;
+	int  op;
+	lista_de_no *novo;
+
+	do
+	{
+		cout << "  --Menu-- " << endl;
+		cout << "0-Sair     " << endl;
+		cout << "1-Inserir  " << endl;
+		cout << "2-Verificar" << endl;
+		cout << "3-Imprimir " << endl;
+		cout << "4-Remover  " << endl;
+		cout << "5-Buscar   " << endl;
+		cin >> op;
+		switch(op)
+		{
+		case 0:
+			return 0;
+			break;
+		case 1:
+			//recebendo o valor do usuario
+			cout << "Digite o valor:" << endl;
+			cin >> valor;
+			//criando espaço na mémoria
+			novo = (lista_de_no*)malloc(sizeof(lista_de_no));
+			novo->dado = valor;
+			novo->prox = NULL;
+			novo-> anterior = NULL;
+			//inserindo na lista
+			inserir(novo);//chamada da função
+			break;
+		case 2:
+			return 0;
+			break;
+		case 3:
+			imprimir();
+			break;
+		case 4:
+			cout << "Informe o valor int a ser removido:" << endl;
+			cin >> valor;//Valor a ser buscado
+			remover( valor);//chamada da função
+			break;
+		case 5:
+			cout << "Informe o valor int a ser buscado:" << endl;
+			cin >> valor;//Valor a ser buscado
+			buscar(valor);//chamada da função
+			break;
+		default:
+			break;
+		}
+	}
+	while(op != 0);
+
+
+
+
+	return 0;
+}
+
+void inserir(lista_de_no *novo)
+{
+	lista_de_no *aux;
+	aux = ultimo;
+
+
+	if(inicio == NULL ) //verifica se a lista esta vazia
+	{
+		inicio = novo;
+		ultimo = novo;
+	}
+	else
+	{
+		aux -> prox = novo;
+		novo -> anterior = aux;
+		ultimo = novo;
+	}
+
+}
+void imprimir()
+{
+	lista_de_no *aux;
+	lista_de_no *aux2;
+	aux = inicio;
+	aux2 = ultimo;
+
+	cout << "Lista do inicio até o final: ";
+	while(aux != NULL)//percorer a lista até o final
+	{
+		cout << " " << aux->dado;
+
+		aux = aux->prox;
+	}
+	cout << endl;
+	cout << "Lista do final até o inicio: ";
+	while(aux2 != NULL)
+	{
+		cout << " " << aux2->dado;
+
+		aux2 = aux2->anterior;
+
+	}
+	cout << endl;
+
+
+}
+void buscar( int valor)
+{
+	lista_de_no *aux;//lista de nó
+	aux = inicio;
+	int cont = 0;
+
+	if(inicio == NULL)
+	{
+		cout << "Lista vazia" << endl;
+	}
+	else
+	{
+
+		while(aux != NULL)//percorer a lista até o final
+		{
+			if(aux->dado == valor)//aux é um elemento da lista e dado é o valor
+			{
+				cout << valor << " foi encontrado na posicao: " << cont + 1 << endl;
+				cont++;
+
+			}
+			aux = aux->prox;//proximo elemento da lista
+		}
+		if(cont == 0)
+		{
+			cout << "Não achou" << endl;
+		}
+	}
+}
+void remover (int valor)
+{
+	lista_de_no *aux;
+	lista_de_no *aux2;
+	aux = inicio;
+	aux2 = ultimo;
+
+	if(inicio == NULL)//lista vazia
+	{
+		cout << "Vazio" << endl;
+	}
+	//se a lista tiver só 1 elemento
+	else if(inicio->dado == valor)
+	{
+		inicio = NULL;
+		ultimo = NULL;
+		free(aux);
+	}
+	//remover o primeiro elemento
+	else if(inicio-> dado == valor)//para achar o  primeiro valor
+	{
+		inicio = aux->prox;
+		aux->prox->anterior = NULL;
+
+	}
+	//remover o ultimo
+	else if(aux2->dado == valor) //para achar o valor desejado
+	{
+		aux2->anterior->prox = NULL;
+		ultimo = aux2->anterior;
+		free(aux2);
+	}
+	//remover do meio
+	else
+	{
+
+		while(aux != NULL)//percorer a lista até o final
+		{
+			//verificar se aux dado é o elemento == a valor
+			if(aux->dado == valor)
+			{
+				break;
+			}
+			aux = aux->prox;//proximo elemento da lista
+		}
+
+		aux->prox->anterior = aux->anterior;
+		aux->anterior->prox = aux->prox;
+		free(aux);
+	}
+
+}
+
+
+
+
